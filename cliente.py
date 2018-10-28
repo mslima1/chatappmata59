@@ -13,15 +13,11 @@ s.send(nickname.encode('ascii'))
 
 clientOnline = True
 
-def receiveMsg(sock):
-    serverOffline = False
-    while clientOnline and (not serverOffline):
-        try:
-            msg = sock.recv(1024).decode('ascii')
+def receiveMsg(sckt):
+    while clientOnline:
+            msg = sckt.recv(1024).decode('ascii')
             print(msg)
-        except:
-            print('Servidor Offline')
-            serverDown = True
+
 
 threading.Thread(target = receiveMsg, args = (s,)).start()
 

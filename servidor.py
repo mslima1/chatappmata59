@@ -1,5 +1,6 @@
 import socket
 import threading
+import time
 
 s = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
 serverOnline = True
@@ -16,12 +17,12 @@ print ('IP do servidor: %s' % ip)
 def handleClient(client, nickname):
     clientConnected = True
     keys = clients.keys ()
-    help = ('-w para usuarios lista de online; -q para se desconectar')
+    help = ('-w para lista de usuarios online; -q para se desconectar')
 
     while clientConnected:
             msg = client.recv (1024).decode ('ascii')
+            print (time.ctime (time.time ()) + str (address) + ' ' + str (msg))
             response = 'Usuarios conectados: \n'
-            found = False
             if '-w' in msg:
                 clientNo = 0
                 for name in keys:
@@ -36,8 +37,8 @@ def handleClient(client, nickname):
                 print (nickname + ' se desconectou')
                 clientConnected = False
             else:
-                for k, v in clients.items():
-                    v.send(msg.encode('ascii'))
+                for k, v in clients.items ():
+                    v.send (msg.encode ('ascii'))
 
 
 while serverOnline:
