@@ -23,20 +23,25 @@ def broadcast(data):
 def handleClient(client, nickname):
     clientConnected = True
     keys = clients.keys ()
+
+    #mensagens auxiliares
     help = ('-w para lista de usuarios online; -q para se desconectar')
     quitMsg = ('%s se desconectou do chat' %str(nickname))
     numUsers = 'Usuarios conectados: \n'
 
     while clientConnected:
             msg = client.recv (MAX_SIZE).decode (ENCODE_TYPE)
+            #log das mensagens no servidor
             print (time.ctime (time.time ()) + str (address) + ' ' + str (msg))
+            #saber o número de usuários online
             if '-w' in msg:
-                clientNo = 0
                 for name in keys:
                     numUsers = numUsers + '-' + name + '\n'
                 client.send (numUsers.encode (ENCODE_TYPE))
+            #ajuda
             elif '-h' in msg:
                 client.send (help.encode (ENCODE_TYPE))
+            #quit
             elif '-q' in msg:
                 response = 'Desconectado'
                 client.send (response.encode (ENCODE_TYPE))
@@ -50,7 +55,9 @@ def handleClient(client, nickname):
 while serverOnline:
     client, address = s.accept ()
     nickname = client.recv (MAX_SIZE).decode (ENCODE_TYPE)
+
     print ('%s se conectou ao servidor' % str (nickname))
+
     client.send ('Bem vindo ao chat! '.encode (ENCODE_TYPE))
     welcomeMsg = ('%s se conectou ao chat' % str(nickname))
     broadcast (welcomeMsg)
